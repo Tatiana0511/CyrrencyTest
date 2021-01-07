@@ -11,7 +11,6 @@ public class GetCurrencyTest {
     private static Response response;
 
 
-
     @Test
     public void getCADCurrencyTest() {
         response = given().get(Consts.URL + Consts.LIVE_ENDPOINT + Consts.ACCESS_KEY + Consts.CAD_CURRENCY);
@@ -27,7 +26,6 @@ public class GetCurrencyTest {
         response = given().get(Consts.URL + Consts.LIVE_ENDPOINT + Consts.ACCESS_KEY + Consts.EUR_CURRENCY);
         System.out.println(response.asString());
         response.then().body("quotes", notNullValue());
-
 
 
     }
@@ -57,22 +55,40 @@ public class GetCurrencyTest {
     }
 
 
-
     @Test
-    public void getCurrencyPerformanceTest(){
+    public void getCurrencyPerformanceTest() {
         response = given().get(Consts.URL + Consts.LIVE_ENDPOINT + Consts.ACCESS_KEY + Consts.CURRENCIES);
         response.then().time(lessThan(1000l));
 
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"EUR","USD","GBP","CAD","SAR"})
-    public void getCurrencyResultTest(String currencyValue){
-        response = given().get(Consts.URL + Consts.LIVE_ENDPOINT + Consts.ACCESS_KEY + "&currencies="+ currencyValue);
+    @ValueSource(strings = {"EUR", "USD", "GBP", "CAD", "SAR"})
+    public void getCurrencyResultTest(String currencyValue) {
+        response = given().get(Consts.URL + Consts.LIVE_ENDPOINT + Consts.ACCESS_KEY + "&currencies=" + currencyValue);
         System.out.println(response.asString());
         response.then().statusCode(200);
 
 
+    }
+
+    @Test
+    public void invalidCurrencyTest() {
+        response = given().get(Consts.URL + Consts.LIVE_ENDPOINT + Consts.ACCESS_KEY + "MLL");
+        System.out.println(response.asString());
+        response.then().body("error.code", equalTo(101));
 
     }
+
+    @Test
+    public void invalidEndPointTest() {
+        response = given().get(Consts.URL + "/change" + Consts.ACCESS_KEY + Consts.CURRENCIES);
+        System.out.println(response.asString());
+        response.then().body("error.code", equalTo(105));
+
+
+    }
+
+
+
 }

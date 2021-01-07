@@ -35,11 +35,11 @@ public class LiveEndPointTest {
 
 
         response.then().body("timestamp",notNullValue());
-        response.then().body("timestamp", equalTo(1609902426));
+        response.then().body("timestamp", equalTo(1610009886));
 
 
         response.then().body("quotes.USDALL", notNullValue());
-        response.then().body("quotes.USDALL", equalTo(100.80683f));
+        response.then().body("quotes.USDALL", equalTo(100.40955f));
 
     }
 

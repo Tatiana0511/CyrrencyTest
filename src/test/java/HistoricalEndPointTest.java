@@ -26,8 +26,31 @@ public class HistoricalEndPointTest {
     public void withoutDateTest() {
         response = given().get(Consts.URL + Consts.HISTORICAL_ENDPOINT + Consts.ACCESS_KEY);
         System.out.println(response.asString());
-        response.then().body("error", anything("{code=301, info=You have not specified a date. [Required format: date=YYYY-MM-DD]}"));
+        response.then().body("error.code", equalTo(301));
 
+    }
+
+    @Test
+    public void invalidDateTest() {
+        response = given().get(Consts.URL + Consts.HISTORICAL_ENDPOINT + Consts.ACCESS_KEY + INVALID_DATE);
+        System.out.println(response.asString());
+        response.then().body("error.code", equalTo(302));
+
+    }
+
+    @Test
+    public void wrongRequestDateTest() {
+        response = given().get(Consts.URL + Consts.HISTORICAL_ENDPOINT + Consts.ACCESS_KEY + "test");
+        System.out.println(response.asString());
+        response.then().body("error.code", equalTo(101));
+
+    }
+
+    @Test
+    public void endPointsNegativeTest() {
+        response = given().get(Consts.URL + "/change" + Consts.ACCESS_KEY );
+        System.out.println(response.asString());
+        response.then().body("error.code", equalTo(105));
 
     }
 }
